@@ -1,0 +1,6 @@
+# Build system
+/target/
+
+# Temporary files
+.*
+!.git*
