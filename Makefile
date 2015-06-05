@@ -18,4 +18,4 @@ target/x86/%.o: arch/x86/%.s
 target/x86/%.o: arch/x86/%.rs
 	$(RUSTC) --emit obj -O -o $@ $<
 
-.PHONY: qemu
+.PHONY: qemu-x86
