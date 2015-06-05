@@ -2,19 +2,34 @@
 
 	/* Multiboot header */
 	.section multiboot
-	.align 4
-	.set MAGIC, 0x1badb002
-	.set FLAGS, 1 << 0 | 1 << 1
-	.long MAGIC
-	.long FLAGS
-	.long -(MAGIC + FLAGS)
+	.align 8
+	.long 0xe85250d6 /* Multiboot magic */
+	.long 0x00000000 /* Architecture: i386 */
+	.long 16 + 12 + 8 + 8 /* Header length */
+	.long -(0xe85250d6 + 16 + 12 + 8 + 8) /* Checksum */
+	/* Console flags tag */
+	.align 8
+	.short 4
+	.short 1 /* Required */
+	.long 12 /*mb_tag_mod - mb_tag_cons*/
+	.long 1 << 0 | 1 << 1 /* EGA text console */
+	/* Module alignment tag */
+	.align 8
+	.short 6 /* Module alignment */
+	.short 0 /* Required */
+	.long 8
+	/* End tag */
+	.align 8
+	.short 0 /* End */
+	.short 0
+	.long 8
 
-	.section multiboot
+	.section .text
 	.global _start
 _start:
 	.code32
 	/* Check for multiboot signature */
-	cmp eax, 0x2badb002
+	cmp eax, 0x36d76289
 	jne panic
 
 	/* Initialise the stack */
