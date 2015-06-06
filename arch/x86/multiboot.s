@@ -3,26 +3,37 @@
 	/* Multiboot header */
 	.section multiboot
 	.align 8
+mb_start:
 	.long 0xe85250d6 /* Multiboot magic */
 	.long 0x00000000 /* Architecture: i386 */
-	.long 16 + 12 + 8 + 8 /* Header length */
-	.long -(0xe85250d6 + 16 + 12 + 8 + 8) /* Checksum */
+	.long mb_end - mb_start /* Header length */
+	.long -(0xe85250d6 + (mb_end - mb_start)) /* Checksum */
+
 	/* Console flags tag */
 	.align 8
+mb_tag_cons_start:
 	.short 4
-	.short 1 /* Required */
-	.long 12 /*mb_tag_mod - mb_tag_cons*/
+	.short 1 /* Optional */
+	.long mb_tag_cons_end - mb_tag_cons_start
 	.long 1 << 0 | 1 << 1 /* EGA text console */
+mb_tag_cons_end:
+
 	/* Module alignment tag */
 	.align 8
+mb_tag_mod_start:
 	.short 6 /* Module alignment */
 	.short 0 /* Required */
-	.long 8
+	.long mb_tag_mod_end - mb_tag_mod_start
+mb_tag_mod_end:
+
 	/* End tag */
 	.align 8
+mb_tag_end_start:
 	.short 0 /* End */
 	.short 0
-	.long 8
+	.long mb_tag_end_end - mb_tag_end_start
+mb_tag_end_end:
+mb_end:
 
 	.section .text
 	.global _start
