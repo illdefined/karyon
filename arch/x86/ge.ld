@@ -13,17 +13,21 @@ SECTIONS {
 	.text : ALIGN(4K) {
 		*(multiboot)
 		*(.text)
+		_etext = .;
 	} :text
 
 	.rodata : ALIGN(4K) {
 		*(.rodata)
+		_erodata = .;
 	} :rodata
 
 	.data : ALIGN(4K) {
 		*(.data)
+		_edata = .;
 	} :data
 
 	.bss : ALIGN(4K) {
 		*(.bss)
+		_end = .;
 	} :data
 }
