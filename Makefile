@@ -1,9 +1,8 @@
 RUSTC := rustc
 
-target/x86/ge: target/x86/init.o target/x86/multiboot.o target/x86/ge.o
+target/x86/ge: target/x86/multiboot.o target/x86/ge.o
 	$(LD) -T arch/x86/ge.ld -z common-page-size=4096 -static -o $@ $^
 
-target/x86/init.o: arch/x86/init.s
 target/x86/multiboot.o: arch/x86/multiboot.s
 target/x86/ge.o: arch/x86/ge.rs
 
