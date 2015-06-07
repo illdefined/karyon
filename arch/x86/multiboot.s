@@ -90,5 +90,5 @@ halt:
 
 	/* Initial stack */
 	.bss
-	.space 0x1000
+	.space 0x4000
 stack:
