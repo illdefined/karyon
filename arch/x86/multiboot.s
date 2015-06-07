@@ -96,9 +96,6 @@ _start:
 	cmp eax, 0x36d76289
 	jne panic
 
-	/* Initialise the stack */
-	mov esp, stack
-
 	/* Check availability of long mode */
 	mov eax, 0x80000000
 	cpuid
@@ -196,9 +193,13 @@ halt:
 
 	.code64
 lm64:
+	/* Initialise the stack */
+	mov rsp, stack
+
+halt64:
 	cli
 	hlt
-	jmp short lm64
+	jmp short halt64
 
 	.section .bss
 	/* Page table */
