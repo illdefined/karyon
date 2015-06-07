@@ -10,7 +10,7 @@ target/x86/grub.iso: target/x86/ge
 	grub-mkrescue -o $@ $^ arch/x86/iso
 
 qemu-x86: target/x86/grub.iso
-	qemu-system-x86_64 -cpu kvm64 -smp cores=2,threads=2,sockets=1 -m 256M -cdrom $< -name karyon -display curses -monitor stdio
+	qemu-system-x86_64 -cpu kvm64 -smp cores=2,threads=2,sockets=1 -m 256M -cdrom $< -name karyon -display sdl -monitor vc
 
 target/x86/%.o: arch/x86/%.s
 	$(AS) -c -o $@ $<
