@@ -102,6 +102,12 @@ _start:
 	cmp eax, 0x80000001
 	jb panic
 
+	/* Check availability of NX bit */
+	mov eax, 0x80000001
+	cpuid
+	or eax, 1 << 20
+	jz panic
+
 	/* PML4T */
 	mov edi, pml4t
 	mov cr3, edi /* Point control register 3 to the PML4T */
