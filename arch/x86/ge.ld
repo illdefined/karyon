@@ -26,8 +26,15 @@ SECTIONS {
 		_edata = .;
 	} :data
 
-	.bss : ALIGN(4K) {
+	.bss : {
 		*(.bss)
 		_end = .;
 	} :data
+
+	_text_page = ADDR(.text) / 0x1000;
+	_rodata_page = ADDR(.rodata) / 0x1000;
+	_data_page = ADDR(.data) / 0x1000;
+
+	_text_size = _rodata_page - _text_page;
+	_rodata_size = _data_page - _rodata_page;
 }
