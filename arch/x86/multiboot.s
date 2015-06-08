@@ -102,6 +102,12 @@ _start:
 	cmp eax, 0x80000001
 	jb panic
 
+	/* Check availability of Page Size Extension */
+	mov eax, 0x00000001
+	cpuid
+	and edx, 1 << 3
+	jz panic
+
 	/* Check availability of NX bit */
 	mov eax, 0x80000001
 	cpuid
