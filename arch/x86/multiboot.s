@@ -105,7 +105,7 @@ _start:
 	/* Check availability of NX bit */
 	mov eax, 0x80000001
 	cpuid
-	or eax, 1 << 20
+	and edx, 1 << 20
 	jz panic
 
 	/* PML4T */
