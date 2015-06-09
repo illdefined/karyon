@@ -10,19 +10,19 @@ PHDRS {
 SECTIONS {
 	. = SIZEOF_HEADERS;
 
-	.text : ALIGN(4K) {
+	.text : ALIGN(16) {
 		_text = .;
 		*(multiboot)
 		*(.text)
 		_etext = .;
 	} :text
 
-	.rodata : ALIGN(4K) {
+	.rodata : ALIGN(16) {
 		*(.rodata)
 		_erodata = .;
 	} :rodata
 
-	.data : ALIGN(4K) {
+	.data : ALIGN(16) {
 		*(.data)
 		_edata = .;
 	} :data
