@@ -187,7 +187,7 @@ lm64:
 	jmp short .halt
 
 	section .bss
-	sectalign 16
+	align 0x1000
 	; Page table
 pml4:
 	resb 0x1000
@@ -196,5 +196,6 @@ pdp:
 pd:
 	resb 0x4000
 	; Initial stack
+	align 16
 	resb 0x4000
 stack:
