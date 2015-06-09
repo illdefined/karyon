@@ -27,7 +27,7 @@ SECTIONS {
 		_edata = .;
 	} :data
 
-	.bss : {
+	.bss : ALIGN(16) {
 		*(.bss)
 		_end = .;
 	} :data
