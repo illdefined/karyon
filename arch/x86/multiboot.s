@@ -1,15 +1,6 @@
 	.intel_syntax noprefix
 
 	.section .rodata
-text_page:
-	.long _text_page
-text_size:
-	.long _text_size
-rodata_page:
-	.long _rodata_page
-rodata_size:
-	.long _rodata_size
-
 	/* 64 bit GDT */
 gdt_base:
 	.set gdt_null, $ - gdt_base
@@ -114,65 +105,48 @@ _start:
 	and edx, 1 << 20
 	jz panic
 
-	/* PML4T */
-	mov edi, pml4t
+	/* Identity map first 4 GiB with 2 MiB pages */
+
+	/* PML4 */
+	mov edi, pml4
 	mov cr3, edi /* Point control register 3 to the PML4T */
-	mov eax, pdpt
+	mov eax, pdp
 	or eax, 1 << 0 | 1 << 1 /* Present, writable */
-	mov [edi], eax
+	stosd /* Write PML4T entry */
 
-	/* PDPT */
-	mov edi, pdpt
-	mov eax, pdt
+	/* PDP */
+	mov edi, pdp
+	mov eax, pd
 	or eax, 1 << 0 | 1 << 1 /* Present, writable */
-	mov [edi], eax
+	mov ebx, 0x1000 /* PD size */
+	mov ecx, 4 /* Number of PDPT entries */
+	mov edx, 4 /* Extra PDPT entry size */
 
-	/* PDT */
-	mov edi, pdt
-	mov eax, pt
-	or eax, 1 << 0 | 1 << 1 /* Present, writable */
-	mov [edi], eax
+	mov ebp, _edata
+	hlt
 
-	/* Identity map first two MiB in PT */
-	mov edi, pt
-	mov eax, 1 << 0 | 1 << 1 /* Present, writable */
-	mov ebx, 1 << 31 /* NX bit */
-	mov ebx, 0
-	mov ecx, 512
-pt_init:
-	mov [edi], eax
-	mov [edi+4], ebx
-	add eax, 0x1000 /* Advance address by one page */
-	add edi, 8 /* Advance index by eight bytes */
-	loop pt_init
+pdp_init:
+	stosd /* Write PDPT entry */
+	add eax, ebx /* Advance PD address */
+	add edi, edx /* Advance PDPT index */
+	loop pdp_init
 
-	/* Set up text segment */
-	mov edi, pt
-	mov eax, [text_page]
-	mov ebx, ~(1 << 1)
-	mov ecx, [text_size]
-	mov edx, ~(1 << 31)
+	/* PD */
+	mov edi, pd
+	mov eax, 1 << 0 | 1 << 1 | 1 << 7 /* Present, writable, 2 MiB */
+	mov ebx, 2 * 1024 * 1024 /* Page size */
+	mov ecx, 2048 /* 2048 PD entries */
+	mov edx, 4 /* Extra PD entry size */
 
-pt_text:
-	and [edi+eax*8], ebx /* Clear writable bit */
-	and [edi+eax*8+4], edx /* Clear NX bit */
-	inc eax /* Advance index */
-	loop pt_text
+pd_init:
+	stosd /* Write PD index */
+	add eax, ebx /* Advance page address */
+	add edi, edx /* Advance PD index */
+	loop pd_init
 
-	/* Set up rodata segment */
-	mov edi, pt
-	mov eax, [rodata_page]
-	mov ebx, ~(1 << 1)
-	mov ecx, [rodata_size]
-
-pt_rodata:
-	and [edi+eax*8], ebx /* Clear writable bit */
-	inc eax /* Advance index by eight bytes */
-	loop pt_rodata
-
-	/* Enable PAE */
+	/* Enable PSE and PAE */
 	mov eax, cr4
-	or eax, 1 << 5
+	or eax,  1 << 4 | 1 << 5
 	mov cr4, eax
 
 	/* Enter long mode */
@@ -215,14 +189,12 @@ halt64:
 
 	.section .bss
 	/* Page table */
-pml4t:
+pml4:
 	.space 0x1000
-pdpt:
+pdp:
 	.space 0x1000
-pdt:
-	.space 0x1000
-pt:
-	.space 0x1000
+pd:
+	.space 0x4000
 	/* Initial stack */
 	.align 16
 	.space 0x4000
