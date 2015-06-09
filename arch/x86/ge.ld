@@ -11,6 +11,7 @@ SECTIONS {
 	. = SIZEOF_HEADERS;
 
 	.text : ALIGN(4K) {
+		_text = .;
 		*(multiboot)
 		*(.text)
 		_etext = .;
