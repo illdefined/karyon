@@ -171,20 +171,20 @@ panic:
 	mov edi, 0xb8000
 	rep stosw
 
-halt:
+.halt:
 	cli
 	hlt
-	jmp short halt
+	jmp short .halt
 
 	bits 64
 lm64:
 	; Initialise the stack
 	mov rsp, stack
 
-halt64:
+.halt:
 	cli
 	hlt
-	jmp short halt64
+	jmp short .halt
 
 	section .bss
 	sectalign 16
