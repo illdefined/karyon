@@ -9,6 +9,9 @@ _start:
 	cmp eax, 0x36d76289
 	jne panic
 
+	; Save multiboot information structure address
+	mov ebp, ebx
+
 	; Check availability of long mode
 	mov eax, 0x80000000
 	cpuid
