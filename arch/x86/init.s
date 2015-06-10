@@ -1,6 +1,8 @@
 %include "arch/x86/gdt.s"
 %include "arch/x86/multiboot.s"
 
+extern main
+
 	section .text
 	global _start
 _start:
@@ -103,6 +105,17 @@ panic:
 lm64:
 	; Initialise the stack
 	mov rsp, stack
+
+	; Clear flags
+	xor rax, rax
+	push rax
+	popfq
+
+	; Pass multiboot information structure address
+	xor rdi, rdi
+	mov edi, ebp
+
+	call main
 
 .halt:
 	cli

@@ -1,6 +1,6 @@
 RUSTC := rustc
 
-target/x86/ge: target/x86/init.o
+target/x86/ge: target/x86/init.o target/x86/ge.o
 	$(LD) -T arch/x86/ge.ld -z max-page-size=4096 -static -o $@ $^
 
 target/x86/init.o: arch/x86/init.s
