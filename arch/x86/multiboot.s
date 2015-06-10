@@ -1,3 +1,7 @@
+extern _text
+extern _edata
+extern _end
+
 	; Multiboot header
 	section multiboot
 	align 8

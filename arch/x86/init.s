@@ -1,7 +1,3 @@
-extern _text
-extern _edata
-extern _end
-
 %include "arch/x86/gdt.s"
 %include "arch/x86/multiboot.s"
 
