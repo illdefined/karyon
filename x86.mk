@@ -15,7 +15,7 @@ x86-ge-d := $(addprefix target/x86/, $(addsuffix .d, $(x86-ge)))
 
 x86: target/x86/ge
 
-qemu-x86: target/x86/grub.iso
+x86-qemu: target/x86/grub.iso
 	qemu-system-x86_64 -m 64M -name karyon -cdrom $< -boot d -display sdl -monitor vc
 
 target/x86/grub.iso: target/x86/ge
