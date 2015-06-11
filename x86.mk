@@ -9,7 +9,7 @@ x86-LDFLAGS   := -b elf64-x86-64 -z max-page-size=0x1000 -static --gc-sections -
 x86-ASFLAGS   := -f elf64 -F dwarf -g
 x86-RUSTFLAGS := --emit obj -C target-cpu=$(x86-cpu) -C target-feature=$(x86-attr) -C code-model=kernel -C debuginfo=2 -C opt-level=3
 
-x86-ge   := multiboot init ge
+x86-ge   := multiboot init ge morestack
 x86-ge-o := $(addprefix target/x86/, $(addsuffix .o, $(x86-ge)))
 x86-ge-d := $(addprefix target/x86/, $(addsuffix .d, $(x86-ge)))
 
