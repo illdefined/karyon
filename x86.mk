@@ -32,16 +32,19 @@ target/x86/grub.iso: target/x86/ge
 target/x86/ge: arch/x86/ge.ld $(x86-ge-d) $(x86-ge-o)
 	$(x86-LD) $(x86-LDFLAGS) -T arch/x86/ge.ld -o $@ $(x86-ge-o)
 
-target/x86/%.d: arch/x86/%.s
+target/x86:
+	mkdir -p $@
+
+target/x86/%.d: arch/x86/%.s target/x86
 	$(x86-AS) $(x86-ASFLAGS) -M -MF $@ $<
 
-target/x86/%.d: arch/x86/%.rs
+target/x86/%.d: arch/x86/%.rs target/x86
 	touch $@
 
-target/x86/%.o: arch/x86/%.s
+target/x86/%.o: arch/x86/%.s target/x86
 	$(x86-AS) $(x86-ASFLAGS) -o $@ $<
 
-target/x86/%.o: arch/x86/%.rs
+target/x86/%.o: arch/x86/%.rs target/x86
 	$(x86-RUSTC) $(x86-RUSTFLAGS) -o $@ $<
 
 .PHONY: x86 x86-qemu
