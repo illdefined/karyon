@@ -15,8 +15,16 @@ x86-ge-d := $(addprefix target/x86/, $(addsuffix .d, $(x86-ge)))
 
 x86: target/x86/ge
 
+x86-check: target/x86/grub.iso target/x86/qemu-monitor
+	rm -f target/x86/qemu-serial
+	(sleep 20; echo quit) | qemu-system-x86_64 -m 64M -name karyon -cdrom $< -boot d -nographic -monitor stdio -serial file:target/x86/qemu-serial >/dev/null
+	grep -E -q '^i' target/x86/qemu-serial
+
 x86-qemu: target/x86/grub.iso
 	qemu-system-x86_64 -m 64M -name karyon -cdrom $< -boot d -display sdl -monitor vc
+
+target/x86/qemu-monitor:
+	mkfifo $@
 
 target/x86/grub.iso: target/x86/ge
 	grub-mkrescue -o $@ $^ arch/x86/iso
