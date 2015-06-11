@@ -1,10 +1,7 @@
 RUSTC := rustc
 
-target/x86/ge: target/x86/init.o target/x86/ge.o
+target/x86/ge: $(addprefix target/x86/, multiboot.o init.o ge.o)
 	$(LD) -T arch/x86/ge.ld -z max-page-size=4096 -static -o $@ $^
-
-target/x86/init.o: arch/x86/init.s
-target/x86/ge.o: arch/x86/ge.rs
 
 target/x86/grub.iso: target/x86/ge
 	grub-mkrescue -o $@ $^ arch/x86/iso

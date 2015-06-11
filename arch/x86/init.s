@@ -1,5 +1,4 @@
 %include "arch/x86/gdt.s"
-%include "arch/x86/multiboot.s"
 
 extern main
 

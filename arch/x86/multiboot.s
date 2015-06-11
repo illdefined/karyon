@@ -1,6 +1,7 @@
 extern _text
 extern _edata
 extern _end
+extern _start
 
 	; Multiboot header
 	section multiboot
