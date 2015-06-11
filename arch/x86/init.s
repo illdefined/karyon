@@ -6,6 +6,50 @@ extern main
 	global _start
 _start:
 	bits 32
+
+	; Set up serial port for debugging
+%ifdef DEBUG
+	; Save EAX
+	mov ebp, eax
+
+	; Disable interrupts
+	xor al, al
+	mov dx, 0x03f8 + 0x01
+	out dx, al
+
+	; Set line control bits
+	mov al, 0b10000000 ; DLAB
+	mov dx, 0x03f8 + 0x03
+	out dx, al
+
+	; Set baud rate to 115200
+	xor al, al
+	mov dx, 0x03f8 + 0x01
+	out dx, al ; High byte
+	inc al
+	dec dx
+	out dx, al ; Low byte
+
+	; Set line control bits
+	mov al, 0b00000011 ; 8N1
+	mov dx, 0x03f8 + 0x03
+	out dx, al
+
+	; Set FIFO control bits
+	mov al, 0b11100111
+	mov dx, 0x03f8 + 0x02
+	out dx, al
+
+	; Set modem control bits
+	mov al, 0b00101011
+	mov al, 0x0B
+	mov dx, 0x03f8 + 0x04
+	out dx, al
+
+	; Restore EAX
+	mov eax, ebp
+%endif
+
 	; Check for multiboot signature
 	cmp eax, 0x36d76289
 	jne panic
@@ -88,6 +132,13 @@ pd_init:
 	jmp gdt_code:lm64
 
 panic:
+	; Write error code to serial line
+%ifdef DEBUG
+	mov al, 'p'
+	mov dx, 0x03f8
+	out dx, al
+%endif
+
 	; BSOD
 	xor eax, eax
 	mov ah, 16
@@ -113,6 +164,13 @@ lm64:
 	; Pass multiboot information structure address
 	xor rdi, rdi
 	mov edi, ebp
+
+	; Write success code to serial line
+%ifdef DEBUG
+	mov al, 'i'
+	mov dx, 0x03f8
+	out dx, al
+%endif
 
 	call main
 

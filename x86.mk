@@ -6,7 +6,7 @@ x86-cpu   := x86-64
 x86-attr  := +64bit,+avx,+call-reg-indirect,+cmov,+cx16,+lzcnt,+popcnt,+sse,+sse2,+sse4.1,+sse4.2,+ssse3
 
 x86-LDFLAGS   := -b elf64-x86-64 -z max-page-size=0x1000 -static -nostdlib
-x86-ASFLAGS   := -f elf64 -F dwarf -g
+x86-ASFLAGS   := -D DEBUG -f elf64 -F dwarf -g
 x86-RUSTFLAGS := --emit obj -C target-cpu=$(x86-cpu) -C target-feature=$(x86-attr) -C code-model=kernel -C debuginfo=2 -C opt-level=3
 
 x86-ge   := multiboot init ge morestack
