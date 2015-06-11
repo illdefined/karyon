@@ -1,5 +1,6 @@
 # Build system
 /target/
+/version.mk
 
 # Temporary files
 .*
