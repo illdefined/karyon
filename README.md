@@ -20,6 +20,7 @@ The following software is required to build *karyon*:
 
 * [POSIX Shell utilities](http://pubs.opengroup.org/onlinepubs/009696699/utilities/contents.html) (provided out of the box by most unixoid systems)
 * [GNU make](https://www.gnu.org/software/make/)
+* [Python](https://www.python.org/) (version ≥ 2.6)
 * [GNU Binutils](https://www.gnu.org/software/binutils/)
 * [NASM](http://www.nasm.us/) (version ≥ 2.11.06)
 * [Rust](http://www.rust-lang.org/) (nightly)
