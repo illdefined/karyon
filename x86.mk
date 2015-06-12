@@ -18,7 +18,7 @@ x86: target/x86/ge
 
 x86-check: target/x86/grub.iso target/x86/qemu-monitor
 	rm -f target/x86/qemu-serial
-	(sleep 20; echo quit) | qemu-system-x86_64 $(x86-QEMUFLAGS) -cdrom $< -boot d -nographic -monitor stdio -serial file:target/x86/qemu-serial >/dev/null
+	(sleep 20; echo quit) | qemu-system-x86_64 $(x86-QEMUFLAGS) -cdrom $< -boot d -nographic -monitor stdio -serial file:target/x86/qemu-serial
 	grep -E -q '^i' target/x86/qemu-serial
 
 x86-qemu: target/x86/grub.iso
