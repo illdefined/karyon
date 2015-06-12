@@ -18,21 +18,15 @@ dirty = match.group(6)
 # Pre‐release?
 if pre > 0 or dirty:
     micro += 1
-    build = '{}.{}.{}-{}'.format(major, minor, micro, pre)
+    version = '{}.{}.{}-{}'.format(major, minor, micro, pre)
 
     # Dirty working tree?
     if dirty:
-        build += '-dirty'
+        version += '-dirty'
 else:
-    build = '{}.{}.{}'.format(major, minor, micro)
+    version = '{}.{}.{}'.format(major, minor, micro)
 
 # Build metadata
-build += '+{}'.format(scm)
+version += '+{}'.format(scm)
 
-print 'BUILD := {}\nMAJOR := {}\nMINOR := {}\nMICRO := {}\nSCM := {}'.format(build, major, minor, micro, scm)
-
-if pre > 0 or dirty:
-    print 'PRE := {}'.format(pre)
-
-    if dirty:
-        print 'DIRTY := 1'
+print 'VERSION := {}\nMAJOR := {}\nMINOR := {}\nMICRO := {}'.format(version, major, minor, micro)
