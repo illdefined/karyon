@@ -8,6 +8,7 @@ x86-attr  := +64bit,+avx,+call-reg-indirect,+cmov,+cx16,+lzcnt,+popcnt,+sse,+sse
 x86-LDFLAGS   := -b elf64-x86-64 -z max-page-size=0x1000 -static -nostdlib
 x86-ASFLAGS   := -D DEBUG -f elf64 -F dwarf -g
 x86-RUSTFLAGS := --emit obj -C target-cpu=$(x86-cpu) -C target-feature=$(x86-attr) -C code-model=kernel -C debuginfo=2 -C opt-level=3
+x86-QEMUFLAGS := -machine q35 -cpu qemu64,+pse,+pae,+nx,+lm -m 64M -name karyon
 
 x86-ge   := multiboot init ge morestack
 x86-ge-o := $(addprefix target/x86/, $(addsuffix .o, $(x86-ge)))
@@ -17,11 +18,11 @@ x86: target/x86/ge
 
 x86-check: target/x86/grub.iso target/x86/qemu-monitor
 	rm -f target/x86/qemu-serial
-	(sleep 20; echo quit) | qemu-system-x86_64 -m 64M -name karyon -cdrom $< -boot d -nographic -monitor stdio -serial file:target/x86/qemu-serial >/dev/null
+	(sleep 20; echo quit) | qemu-system-x86_64 $(x86-QEMUFLAGS) -cdrom $< -boot d -nographic -monitor stdio -serial file:target/x86/qemu-serial >/dev/null
 	grep -E -q '^i' target/x86/qemu-serial
 
 x86-qemu: target/x86/grub.iso
-	qemu-system-x86_64 -m 64M -name karyon -cdrom $< -boot d -display sdl -monitor vc
+	qemu-system-x86_64 $(x86-QEMUFLAGS) -cdrom $< -boot d -display sdl -monitor vc
 
 target/x86/qemu-monitor:
 	mkfifo $@
