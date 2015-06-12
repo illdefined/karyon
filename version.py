@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # coding: utf-8
 
 import re
@@ -29,4 +29,4 @@ else:
 # Build metadata
 version += '+{}'.format(scm)
 
-print 'VERSION := {}\nMAJOR := {}\nMINOR := {}\nMICRO := {}'.format(version, major, minor, micro)
+print('VERSION := {}\nMAJOR := {}\nMINOR := {}\nMICRO := {}'.format(version, major, minor, micro))
