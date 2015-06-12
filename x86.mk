@@ -37,7 +37,7 @@ target/x86:
 	mkdir -p $@
 
 target/x86/%.d: arch/x86/%.s target/x86
-	$(x86-AS) $(x86-ASFLAGS) -M -MF $@ -MQ $(patsubst %.d,%.o,$@) $<
+	$(x86-AS) $(x86-ASFLAGS) -M -MF $@ -MT '$@ $(patsubst %.d,%.o,$@)' $<
 
 target/x86/%.d: arch/x86/%.rs target/x86
 	touch $@
