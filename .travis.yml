@@ -6,7 +6,7 @@ before_install:
     - sudo apt-get install -qq -y alien grub2 xorriso
     - wget http://archive.ubuntu.com/ubuntu/pool/main/q/qemu/qemu-system-x86_2.0.0+dfsg-2ubuntu1.13_amd64.deb
     - wget http://www.nasm.us/pub/nasm/releasebuilds/2.11.08/linux/nasm-2.11.08-1.x86_64.rpm
-    - sudo dpkg -i qemu-system-x86_2.0.0+dfsg-2ubuntu1.13_amd64.deb || true
+    - 'sudo dpkg -i qemu-system-x86_2.0.0+dfsg-2ubuntu1.13_amd64.deb ||:'
     - sudo apt-get -f install -qq -y
     - sudo dpkg -i qemu-system-x86_2.0.0+dfsg-2ubuntu1.13_amd64.deb
     - sudo alien nasm-2.11.08-1.x86_64.rpm
