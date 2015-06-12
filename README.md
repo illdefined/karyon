@@ -35,7 +35,7 @@ On a current installation of Ubuntu Linux (≥ 14.04), these can be installed 
 ```sh
 sudo apt-get install make binutils alien curl grub2 xorriso qemu-system-x86
 curl -s -S -f https://static.rust-lang.org/rustup.sh | sh -s -- --channel=nightly
-wget http://www.nasm.us/pub/nasm/releasebuilds/2.11.08/linux/nasm-2.11.08-1.x86_64.rpm
+curl -f -O http://www.nasm.us/pub/nasm/releasebuilds/2.11.08/linux/nasm-2.11.08-1.x86_64.rpm
 sudo alien nasm-2.11.08-1.x86_64.rpm
 sudo dpkg -i nasm_2.11.08-2_amd64.deb
 ```
