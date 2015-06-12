@@ -57,3 +57,9 @@ make x86-check
 ```sh
 make x86-qemu
 ```
+
+## Copyright
+
+This work may be used under the terms of the MirOS licence.
+
+Please refer to the ‘Licence’ file in the source tree for details.
