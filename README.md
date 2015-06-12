@@ -12,7 +12,7 @@ karyon – a microkernel experiment in Rust
 
 ## Building
 
-Although *karyon* is intended to be portable to any platform with a MMU, only x86-64 is supported for now.
+Although *karyon* is intended to be portable to any platform with an MMU, only x86-64 is supported for now.
 
 ### Prerequisites
 
