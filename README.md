@@ -6,6 +6,10 @@ karyon – a microkernel experiment in Rust
 [badge-travis]: https://img.shields.io/travis/illdefined/karyon.svg
 [travis]: https://travis-ci.org/illdefined/karyon
 
+## Abstract
+
+*karyon* is my personal microkernel experiment in the Rust programming language.
+
 ## Building
 
 Although *karyon* is intended to be portable to any platform with a MMU, only x86-64 is supported for now.
