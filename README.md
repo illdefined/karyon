@@ -28,7 +28,7 @@ The automatic tests additionally require:
 
 * [GRUB](https://www.gnu.org/software/grub/) (version ≥ 2.00)
 * [libisoburn](http://libburnia-project.org/)
-* [QEMU](http://www.qemu.org/)
+* [QEMU](http://www.qemu.org/) (version ≥ 2.0)
 
 On a current installation of Ubuntu Linux (≥ 14.04), these can be installed as follows:
 
