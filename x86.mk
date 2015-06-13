@@ -10,11 +10,31 @@ x86-ASFLAGS   := -D DEBUG -f elf64 -F dwarf -g
 x86-RUSTFLAGS := --emit obj -C target-cpu=$(x86-cpu) -C target-feature=$(x86-attr) -C code-model=kernel -C debuginfo=2 -C opt-level=3
 x86-QEMUFLAGS := -machine q35 -cpu qemu64,+pse,+pae,+nx,+lm -m 64M -name karyon
 
+define x86-as-d =
+$(x86-AS) $(x86-ASFLAGS) -M -MF $@ -MT '$@ $(patsubst %.d,%.o,$@)' $<
+endef
+
+define x86-as-o =
+$(x86-AS) $(x86-ASFLAGS) -o $@ $<
+endef
+
+define x86-rustc-d =
+touch $@
+endef
+
+define x86-rustc-o =
+$(x86-RUSTC) $(x86-RUSTFLAGS) -o $@ $<
+endef
+
 x86-ge   := multiboot init ge morestack
 x86-ge-o := $(addprefix target/x86/ge/, $(addsuffix .o, $(x86-ge)))
 x86-ge-d := $(addprefix target/x86/ge/, $(addsuffix .d, $(x86-ge)))
 
-x86: target/x86/ge/ge
+x86-karyon   := karyon morestack
+x86-karyon-o := $(addprefix target/x86/karyon/, $(addsuffix .o, $(x86-karyon)))
+x86-karyon-d := $(addprefix target/x86/karyon/, $(addsuffix .d, $(x86-karyon)))
+
+x86: target/x86/ge/ge target/x86/karyon/karyon
 
 x86-check: target/x86/grub.iso target/x86/qemu-monitor
 	rm -f target/x86/qemu-serial
@@ -37,16 +57,40 @@ target/x86/ge:
 	mkdir -p $@
 
 target/x86/ge/%.d: ge/arch/x86/%.s target/x86/ge
-	$(x86-AS) $(x86-ASFLAGS) -M -MF $@ -MT '$@ $(patsubst %.d,%.o,$@)' $<
+	$(x86-as-d)
 
 target/x86/ge/%.d: ge/arch/x86/%.rs target/x86/ge
-	touch $@
+	$(x86-rustc-d)
 
 target/x86/ge/%.o: ge/arch/x86/%.s target/x86/ge
-	$(x86-AS) $(x86-ASFLAGS) -o $@ $<
+	$(x86-as-o)
 
 target/x86/ge/%.o: ge/arch/x86/%.rs target/x86/ge
-	$(x86-RUSTC) $(x86-RUSTFLAGS) -o $@ $<
+	$(x86-rustc-o)
+
+target/x86/karyon/karyon: karyon/arch/x86/karyon.ld $(x86-karyon-d) $(x86-karyon-o)
+	$(x86-LD) $(x86-LDFLAGS) -T karyon/arch/x86/karyon.ld -o $@ $(x86-karyon-o)
+
+target/x86/karyon:
+	mkdir -p $@
+
+target/x86/karyon/%.d: karyon/arch/x86/%.s target/x86/karyon
+	$(x86-as-d)
+
+target/x86/karyon/%.d: karyon/%.rs target/x86/karyon
+	$(x86-rustc-d)
+
+target/x86/karyon/%.d: karyon/arch/x86/%.rs target/x86/karyon
+	$(x86-rustc-d)
+
+target/x86/karyon/%.o: karyon/arch/x86/%.s target/x86/karyon
+	$(x86-as-o)
+
+target/x86/karyon/%.o: karyon/%.rs target/x86/karyon
+	$(x86-rustc-o)
+
+target/x86/karyon/%.o: karyon/arch/x86/%.rs target/x86/karyon
+	$(x86-rustc-o)
 
 .PHONY: x86 x86-qemu
 
