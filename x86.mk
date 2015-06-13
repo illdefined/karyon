@@ -11,10 +11,10 @@ x86-RUSTFLAGS := --emit obj -C target-cpu=$(x86-cpu) -C target-feature=$(x86-att
 x86-QEMUFLAGS := -machine q35 -cpu qemu64,+pse,+pae,+nx,+lm -m 64M -name karyon
 
 x86-ge   := multiboot init ge morestack
-x86-ge-o := $(addprefix target/x86/, $(addsuffix .o, $(x86-ge)))
-x86-ge-d := $(addprefix target/x86/, $(addsuffix .d, $(x86-ge)))
+x86-ge-o := $(addprefix target/x86/ge/, $(addsuffix .o, $(x86-ge)))
+x86-ge-d := $(addprefix target/x86/ge/, $(addsuffix .d, $(x86-ge)))
 
-x86: target/x86/ge
+x86: target/x86/ge/ge
 
 x86-check: target/x86/grub.iso target/x86/qemu-monitor
 	rm -f target/x86/qemu-serial
@@ -27,25 +27,25 @@ x86-qemu: target/x86/grub.iso
 target/x86/qemu-monitor:
 	mkfifo $@
 
-target/x86/grub.iso: target/x86/ge
-	grub-mkrescue -o $@ $^ arch/x86/iso
+target/x86/grub.iso: target/x86/ge/ge
+	grub-mkrescue -o $@ $^ ge/arch/x86/iso
 
-target/x86/ge: arch/x86/ge.ld $(x86-ge-d) $(x86-ge-o)
-	$(x86-LD) $(x86-LDFLAGS) -T arch/x86/ge.ld -o $@ $(x86-ge-o)
+target/x86/ge/ge: ge/arch/x86/ge.ld $(x86-ge-d) $(x86-ge-o)
+	$(x86-LD) $(x86-LDFLAGS) -T ge/arch/x86/ge.ld -o $@ $(x86-ge-o)
 
-target/x86:
+target/x86/ge:
 	mkdir -p $@
 
-target/x86/%.d: arch/x86/%.s target/x86
+target/x86/ge/%.d: ge/arch/x86/%.s target/x86/ge
 	$(x86-AS) $(x86-ASFLAGS) -M -MF $@ -MT '$@ $(patsubst %.d,%.o,$@)' $<
 
-target/x86/%.d: arch/x86/%.rs target/x86
+target/x86/ge/%.d: ge/arch/x86/%.rs target/x86/ge
 	touch $@
 
-target/x86/%.o: arch/x86/%.s target/x86
+target/x86/ge/%.o: ge/arch/x86/%.s target/x86/ge
 	$(x86-AS) $(x86-ASFLAGS) -o $@ $<
 
-target/x86/%.o: arch/x86/%.rs target/x86
+target/x86/ge/%.o: ge/arch/x86/%.rs target/x86/ge
 	$(x86-RUSTC) $(x86-RUSTFLAGS) -o $@ $<
 
 .PHONY: x86 x86-qemu

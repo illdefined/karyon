@@ -1,4 +1,4 @@
-%include "arch/x86/gdt.s"
+%include "ge/arch/x86/gdt.s"
 
 extern main
 
