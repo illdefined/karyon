@@ -15,7 +15,7 @@ pub extern fn main() {
 fn panic_fmt() -> ! {
 	loop {
 		unsafe {
-			asm!("cli hlt" :::: "volatile")
+			asm!("cli\nhlt" :::: "volatile")
 		}
 	}
 }
