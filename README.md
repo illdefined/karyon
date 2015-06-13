@@ -59,6 +59,14 @@ make x86-check
 make x86-qemu
 ```
 
+## Tasks
+
+* Parse Multiboot tags and setup framebuffer
+* Add primitive ELF parser to run kernel
+* Implement [GDB stub](https://sourceware.org/gdb/onlinedocs/gdb/Remote-Protocol.html) for remote debugging
+* Design and implement API / ABI
+* Implement σ₀
+
 ## Copyright
 
 This work may be used under the terms of the MirOS licence.
