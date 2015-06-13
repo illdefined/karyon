@@ -4,6 +4,8 @@ rust: nightly
 before_install:
     - sudo apt-get update -qq
     - sudo apt-get install -qq -y alien
+    - wget http://archive.ubuntu.com/ubuntu/pool/main/m/make-dfsg/make_4.0-8.1_amd64.deb
+    - sudo dpkg -i make_4.0-8.1_amd64.deb
     - wget http://www.nasm.us/pub/nasm/releasebuilds/2.11.08/linux/nasm-2.11.08-1.x86_64.rpm
     - sudo alien nasm-2.11.08-1.x86_64.rpm
     - sudo dpkg -i nasm_2.11.08-2_amd64.deb
